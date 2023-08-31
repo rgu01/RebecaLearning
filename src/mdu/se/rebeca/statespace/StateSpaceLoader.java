@@ -9,6 +9,9 @@ public abstract class StateSpaceLoader<T extends State<T>> extends DefaultHandle
 	public final static String TIME = "time";
 	public final static String NOW = "now";
 	public final static String STATE = "state";
+	public final static String REBEC = "rebec";
+	public final static String VARIABLE = "variable";
+	public final static String STATEVARIABLE = "statevariables";
 	public final static String TRANSITION = "transition";
 	public final static String MESSAGE_SERVER = "messageserver";
 	
@@ -24,7 +27,7 @@ public abstract class StateSpaceLoader<T extends State<T>> extends DefaultHandle
 	T currentState;
 	Transition<T> currentTransition;
 	
-	boolean readNow;
+	boolean readNow, variableNow;
 	public void startElement(String uri, String localName,String qName, 
             Attributes attributes) throws SAXException {
 		if (qName.equalsIgnoreCase(STATE)) {
@@ -39,6 +42,15 @@ public abstract class StateSpaceLoader<T extends State<T>> extends DefaultHandle
 			}
 		} else if (qName.equalsIgnoreCase(NOW)) {
 			readNow = true;
+		}  else if (qName.equalsIgnoreCase(REBEC)) {
+			//rebecNow = true;
+			//String name = attributes.getValue("name");
+		}  else if (qName.equalsIgnoreCase(VARIABLE)) {
+			variableNow = true;
+			String name = attributes.getValue("name");
+			String type = attributes.getValue("type");
+			String value = "";
+			currentState.addVariable(name, type, value);
 		} else if (qName.equalsIgnoreCase(TRANSITION)) {
 			currentTransition = new Transition<T>();
 			statespace.addNumberOfTransitions();
@@ -68,14 +80,19 @@ public abstract class StateSpaceLoader<T extends State<T>> extends DefaultHandle
 	}
 	
 	public void characters(char ch[], int start, int length) throws SAXException {
+		String content;
 		if(readNow) {
 			readNow = false;
 			if (currentState != null) {
-				currentState.setTime(Integer.parseInt(new String(ch, start, length)));
-//				if (statespace.getStates().isEmpty())
-//					statespace.setInitialState(currentState);
-//				statespace.getStates().put(currentState.getId(), currentState);
-//				currentState = null;
+				content = new String(ch, start, length);
+				currentState.setTime(Integer.parseInt(content));
+			}
+		}
+		if(variableNow) {
+			variableNow = false;
+			if (currentState != null) {
+				content = new String(ch, start, length);
+				currentState.changeVariable(content);
 			}
 		}
 	}

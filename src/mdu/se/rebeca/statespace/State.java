@@ -1,6 +1,9 @@
 package mdu.se.rebeca.statespace;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class State <T extends State<T>> {
@@ -8,6 +11,7 @@ public class State <T extends State<T>> {
 	protected int time;
 	protected Set<Transition<T>> incomming = new HashSet<Transition<T>>(), outgoing = new HashSet<Transition<T>>();
 	protected Set<String> atomicPropositions = new HashSet<String>();
+	protected List<String> variables = new ArrayList<String>();
 		
 	public String getId() {
 		return id;
@@ -29,6 +33,15 @@ public class State <T extends State<T>> {
 	}
 	public Set<String> getAtomicPropositions() {
 		return atomicPropositions;
+	}
+	public boolean addVariable(String name, String type, String value) {
+		return this.variables.add(name + ": " + value);
+	}
+	public boolean changeVariable(String value) {
+		int last = variables.size() - 1;
+		String key = this.variables.get(last);
+		this.variables.remove(last);
+		return this.variables.add(key + value);
 	}
 	
 	@Override
@@ -59,7 +72,11 @@ public class State <T extends State<T>> {
 	
 	@Override
 	public String toString() {
-		String str = this.id + "," + this.time + ",[";
+		String str = this.id + "," + this.time + ",{";
+		for(String var : this.variables) {
+			str += "," + var;
+		}
+		str += "},[";
 		for(String pros : this.atomicPropositions) {
 			str += "," + pros;
 		}

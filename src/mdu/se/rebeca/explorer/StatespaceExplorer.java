@@ -78,9 +78,19 @@ public class StatespaceExplorer <T extends State<T>>{
 		}
 		if(!environment) {
 			//system's actions
+			//guess again if needed
+			if(!this.controller.isStateCovered(source)) {
+				for(Transition<T> next : source.getOutgoing()) {
+					trace.add(source, next);
+					this.guess(next.getDestination(), trace);
+				}
+			}
+			//check the controller's actions
 			for(Transition<T> next : source.getOutgoing()) {
-				trace.add(source, next);
-				this.guess(next.getDestination(), trace);
+				if(this.controller.isActionAllowed(source, next)) {
+					trace.add(source, next);
+					pass = pass || this.checkSafety(next.getDestination(), trace);
+				}
 			}
 		} else {
 			//environment's actions
@@ -97,7 +107,7 @@ public class StatespaceExplorer <T extends State<T>>{
 	}
 	
 	public void checkSecurity(State<T> source, Trace<T> trace) {
-		
+		//to be added...
 	}
 	
 	public static void main(String arg[]) {

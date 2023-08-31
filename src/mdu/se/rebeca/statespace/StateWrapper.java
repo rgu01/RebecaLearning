@@ -1,5 +1,6 @@
 package mdu.se.rebeca.statespace;
 
+
 public class StateWrapper extends State<StateWrapper> implements Comparable<StateWrapper> {
 	private int distance;
 	
@@ -24,12 +25,7 @@ public class StateWrapper extends State<StateWrapper> implements Comparable<Stat
 	
 	@Override
 	public String toString() {
-		String str = this.id + "," + this.time + ",[";
-		for(String pros : this.atomicPropositions) {
-			str += "," + pros;
-		}
-		str += "]";
-		return str;
+		return super.toString();
 	}
 	
 	@Override
