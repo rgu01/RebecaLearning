@@ -9,7 +9,7 @@ import mdu.se.rebeca.statespace.StateSpace;
 import mdu.se.rebeca.statespace.StateWrapper;
 import mdu.se.rebeca.statespace.Trace;
 import mdu.se.rebeca.statespace.Transition;
-import mdu.se.rebeca.xmlparser.*;
+import mdu.se.rebeca.xml.*;
 
 public class StatespaceExplorer <T extends State<T>>{
 	private Controller<T> controller;
@@ -25,11 +25,13 @@ public class StatespaceExplorer <T extends State<T>>{
 		Set<String> pros = source.getAtomicPropositions();
 		if(pros.contains("win")) {
 			//learn and add
+			trace.add(source, null);
 			controller.add(trace);
 			return;
 		}
 		if(pros.contains("collision") || trace.contains(source) || source.getOutgoing().isEmpty()) {
 			//learn and prune
+			trace.add(source, null);
 			controller.prune(trace);
 			return;
 		}
@@ -42,6 +44,9 @@ public class StatespaceExplorer <T extends State<T>>{
 			//when action.getAction() == null, it is a delay
 			if(action.getAction() != null && action.getAction().equals("ARRIVE")) {
 				exhaustive = false;
+				break;
+			}
+			if(action.getAction() == null) {
 				break;
 			}
 		}
@@ -111,11 +116,13 @@ public class StatespaceExplorer <T extends State<T>>{
 	}
 	
 	public static void main(String arg[]) {
-		StateSpace<StateWrapper> statespace = StatespaceParser.parse("statespace/RobotEasy.statespace");
+		StateSpaceProcessor<StateWrapper> processor = new StateSpaceProcessor<StateWrapper>();
+		StateSpace<StateWrapper> statespace = processor.parse("statespace/RobotEasy.statespace");
 		StatespaceExplorer<StateWrapper> explorer = new StatespaceExplorer<StateWrapper>();
 		Trace<StateWrapper> trace = new Trace<StateWrapper>();
 		explorer.guess(statespace.getInitialState(), trace);
-		explorer.checkSafety(statespace.getInitialState(), trace);
-		explorer.checkSecurity(statespace.getInitialState(), trace);
+		processor.writePolicy(explorer.controller);
+		//explorer.checkSafety(statespace.getInitialState(), trace);
+		//explorer.checkSecurity(statespace.getInitialState(), trace);
 	}
 }

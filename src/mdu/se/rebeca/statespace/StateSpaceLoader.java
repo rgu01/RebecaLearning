@@ -63,8 +63,11 @@ public abstract class StateSpaceLoader<T extends State<T>> extends DefaultHandle
 			currentTransition.setShift(Integer.parseInt(attributes.getValue("shift")));
 			source.setTime(Integer.parseInt(attributes.getValue("executionTime")));
 		} else if (qName.equalsIgnoreCase(MESSAGE_SERVER)) {
+			currentTransition.setSender(attributes.getValue("sender"));
+			currentTransition.setOwner(attributes.getValue("owner"));
 			currentTransition.setAction(attributes.getValue("title"));
 		} else if (qName.equalsIgnoreCase(TIME)) {
+			currentTransition.setAction("time");
 			currentTransition.setWeight(Integer.parseInt(attributes.getValue("value")));
 		}
 	}

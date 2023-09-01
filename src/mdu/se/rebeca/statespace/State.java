@@ -74,7 +74,7 @@ public class State <T extends State<T>> {
 	public String toString() {
 		String str = this.id + "," + this.time + ",{";
 		for(String var : this.variables) {
-			str += "," + var;
+			str += "," + var + "";
 		}
 		str += "},[";
 		for(String pros : this.atomicPropositions) {

@@ -4,6 +4,8 @@ public class Transition <T extends State<T>> {
 	
 	private T source, destination;
 	private String action;
+	private String sender;
+	private String owner;
 	private int weight;
 	private int shift;
 	
@@ -24,6 +26,18 @@ public class Transition <T extends State<T>> {
 	}
 	public void setAction(String action) {
 		this.action = action;
+	}
+	public String getSender() {
+		return sender;
+	}
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 	public int getWeight() {
 		return weight;
@@ -49,7 +63,7 @@ public class Transition <T extends State<T>> {
 	}
 	@Override
 	public String toString() {
-		String str = this.action + ", from: (" + this.source.toString() + "), to: (" + this.destination.toString() + ")";
+		String str = this.action + ", from: (" + this.source.toString() + "), \nto: (" + this.destination.toString() + ")";
 		return str;
 	}
 }
