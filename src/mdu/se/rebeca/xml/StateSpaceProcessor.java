@@ -44,7 +44,7 @@ public class StateSpaceProcessor<T extends State<T>> {
 		return statespace;
 	}
 
-	public void writePolicy(Controller policy) {
+	public void writePolicy(Controller policy, String directory) {
 		try {
 			HashMap<State<T>, List<Transition<T>>> winning = policy.getPolicy();
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -86,12 +86,10 @@ public class StateSpaceProcessor<T extends State<T>> {
 					}
 				}
 			}
-
 			doc.appendChild(rootElement);
-
 			//FileOutputStream outputXML = new FileOutputStream("statespace/policy.xml");
 			//writeXml(doc, outputXML);
-			FileOutputStream outputStateSpace = new FileOutputStream("statespace/policy.statespace");
+			FileOutputStream outputStateSpace = new FileOutputStream(directory);
 			writeXml(doc, outputStateSpace);
 		} catch (Exception ex) {
 			ex.printStackTrace();

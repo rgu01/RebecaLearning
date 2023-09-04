@@ -33,4 +33,26 @@ public class Trace <T extends State<T>> {
 		}
 		return false;
 	}
+	
+	public boolean isReachable(String pro) {
+		for(Map.Entry<State<T>,Transition<T>> entry : this.seq) {
+			if(entry.getKey().getAtomicPropositions().contains(pro)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public int distance(Trace other) {
+		return 0;
+	}
+	
+	public Trace clone() {
+		Trace copy = new Trace();
+		for(Map.Entry<State<T>,Transition<T>> entry : this.seq) {
+			copy.add(entry.getKey(), entry.getValue());
+		}
+		return copy;
+		
+	}
 }
