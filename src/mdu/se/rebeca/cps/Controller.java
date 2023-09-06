@@ -92,12 +92,27 @@ public class Controller<T extends State<T>> {
 		return this.winning.containsKey(state);
 	}
 	
+	public boolean shouldPrune(State<T> state) {
+		return this.losing.containsKey(state);
+	}
+	
 	public boolean isLeaf(State<T> state) {
 		return this.winning.get(state).size() == 1 && this.winning.get(state).get(0) == null;
 	}
 
 	public boolean isActionAllowed(State<T> state, Transition<T> action) {
-		return this.winning.containsKey(state) && this.winning.get(state).contains(action);
+		boolean result = false;
+		
+		if(this.winning.containsKey(state) && this.winning.get(state).contains(action)) {
+			//boolean temp1 = this.losing.containsKey(state);
+			//boolean temp2 = this.losing.get(state).contains(action);
+			//if(!this.losing.containsKey(state) || !this.losing.get(state).contains(action)) {
+			//	result = true;
+			//}
+			result = true;
+		}
+		
+		return result;
 	}
 
 	public String toString() {
