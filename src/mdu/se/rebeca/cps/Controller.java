@@ -37,7 +37,7 @@ public class Controller<T extends State<T>> {
 	public void add(Trace<T> trace) {
 		State<T> state = null;
 		Transition<T> action = null;
-		for (Map.Entry<State<T>, Transition<T>> entry : trace.seq) {
+		for (Pair<T> entry : trace.seq) {
 			state = entry.getKey();
 			action = entry.getValue();
 			if (this.winning.containsKey(state)) {
@@ -55,7 +55,7 @@ public class Controller<T extends State<T>> {
 	public void addSecurity(Trace<T> trace) {
 		State<T> state = null;
 		Transition<T> action = null;
-		for (Map.Entry<State<T>, Transition<T>> entry : trace.seq) {
+		for (Pair<T> entry : trace.seq) {
 			state = entry.getKey();
 			action = entry.getValue();
 			if (this.secure.containsKey(state)) {
@@ -74,7 +74,7 @@ public class Controller<T extends State<T>> {
 		State<T> state = null;
 		Transition<T> action = null;
 		List<Transition<T>> actions = new ArrayList<Transition<T>>();
-		for (Map.Entry<State<T>, Transition<T>> entry : trace.seq) {
+		for (Pair<T> entry : trace.seq) {
 			state = entry.getKey();
 			action = entry.getValue();
 			if (this.losing.containsKey(state)) {

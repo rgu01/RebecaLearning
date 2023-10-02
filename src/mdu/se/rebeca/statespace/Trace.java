@@ -1,23 +1,21 @@
 package mdu.se.rebeca.statespace;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Trace <T extends State<T>> {
-	public List<Map.Entry<State<T>,Transition<T>>> seq;
+	public List<Pair<T>> seq;
 	
 	public Trace() {
-		this.seq = new ArrayList<Map.Entry<State<T>,Transition<T>>> ();
+		this.seq = new ArrayList<Pair<T>> ();
 	}
 	
 	public void add(State<T> state, Transition<T> action) {
-		this.seq.add(Pair.of(state, action));
+		this.seq.add(new Pair<T>(state, action));
 	}
 	
 	public boolean contains(State<T> state, Transition<T> action) {
-		for(Map.Entry<State<T>,Transition<T>> entry : this.seq) {
+		for(Pair<T> entry : this.seq) {
 			if(entry.getKey().equals(state) && entry.getValue().equals(action)) {
 				return true;
 			}
@@ -26,7 +24,7 @@ public class Trace <T extends State<T>> {
 	}
 	
 	public boolean contains(State<T> state) {
-		for(Map.Entry<State<T>,Transition<T>> entry : this.seq) {
+		for(Pair<T> entry : this.seq) {
 			if(entry.getKey().equals(state)) {
 				return true;
 			}
@@ -35,7 +33,7 @@ public class Trace <T extends State<T>> {
 	}
 	
 	public boolean isReachable(String pro) {
-		for(Map.Entry<State<T>,Transition<T>> entry : this.seq) {
+		for(Pair<T> entry : this.seq) {
 			if(entry.getKey().getAtomicPropositions().contains(pro)) {
 				return true;
 			}
@@ -43,13 +41,13 @@ public class Trace <T extends State<T>> {
 		return false;
 	}
 	
-	public int distance(Trace other) {
+	public int distance(Trace<T> other) {
 		return 0;
 	}
 	
-	public Trace clone() {
-		Trace copy = new Trace();
-		for(Map.Entry<State<T>,Transition<T>> entry : this.seq) {
+	public Trace<T> clone() {
+		Trace<T> copy = new Trace<T>();
+		for(Pair<T> entry : this.seq) {
 			copy.add(entry.getKey(), entry.getValue());
 		}
 		return copy;
